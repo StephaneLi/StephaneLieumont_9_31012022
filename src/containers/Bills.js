@@ -34,9 +34,9 @@ export default class {
       .bills()
       .list()
       .then(snapshot => {
-        // Sort array data by Date
-        let bills = snapshot.sort((a, b) => new Date(b.date) - new Date(a.date))
-        bills = bills
+        const bills = snapshot
+          // Sort By Date DESC
+          .sort((a, b) => new Date(b.date) - new Date(a.date))
           .map(doc => {
             try {
               return {
@@ -54,7 +54,8 @@ export default class {
                 status: formatStatus(doc.status)
               }
             }
-          })        
+          })
+          console.log('length', bills.length)
         return bills
       })
     }
