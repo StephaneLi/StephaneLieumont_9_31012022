@@ -13,24 +13,22 @@ export default class NewBill {
     this.fileUrl = null
     this.fileName = null
     this.billId = null
+    this.validFile = false
     new Logout({ document, localStorage, onNavigate })
   }
   handleChangeFile = e => {
     e.preventDefault()
-    const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
-    const filePath = e.target.value.split(/\\/g)
-    const fileName = filePath[filePath.length-1]
+    const file = e.target.files[0]
+    const fileName = e.target.files[0].name
     const email = JSON.parse(localStorage.getItem("user")).email
-    const fileExtension = fileName.split('.').pop();  
+    const fileExtension = fileName.split('.').pop();
     
     const formData = new FormData()
 
-    console.log(fileExtension)
-        
     if(fileExtension.match('(jpe?g|png)')) {
       formData.append('file', file)
       formData.append('email', email)
-  
+      
       this.store
         .bills()
         .create({
@@ -40,13 +38,20 @@ export default class NewBill {
           }
         })
         .then(({fileUrl, key}) => {
+          this.validFile = true
           this.billId = key
           this.fileUrl = fileUrl
           this.fileName = fileName
-        }).catch(error => console.error(error))
+        }).catch(error => { 
+          this.validFile = false
+          console.error(error)
+          return this.validFile
+        })
     } else {
       e.target.value = ''
+      this.validFile = false
     }
+    return this.validFile
   }
   handleSubmit = e => {
     e.preventDefault()
@@ -71,6 +76,7 @@ export default class NewBill {
 
   // not need to cover this function by tests
   updateBill = (bill) => {
+    console.log(this.store)
     if (this.store) {
       this.store
       .bills()

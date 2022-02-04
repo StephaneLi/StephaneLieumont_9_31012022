@@ -27,7 +27,7 @@ export default class {
     $('#modaleFile').modal('show')
   }
 
-  getBills = () => {
+  getBills = () => {    
     if (this.store) {
       return this.store
       .bills()
@@ -53,7 +53,6 @@ export default class {
               }
             }
           })
-          console.log('length', bills.length)
         return bills
       })
     }
