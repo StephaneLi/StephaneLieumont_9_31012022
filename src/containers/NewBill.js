@@ -76,7 +76,6 @@ export default class NewBill {
 
   // not need to cover this function by tests
   updateBill = (bill) => {
-    console.log(this.store)
     if (this.store) {
       this.store
       .bills()
@@ -84,7 +83,9 @@ export default class NewBill {
       .then(() => {
         this.onNavigate(ROUTES_PATH['Bills'])
       })
-      .catch(error => console.error(error))
+      .catch(error => {
+        console.error(error)
+      })
     }
   }
 }
